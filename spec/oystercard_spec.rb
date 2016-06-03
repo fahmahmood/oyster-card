@@ -50,18 +50,6 @@ let (:journey) {double(:journey, start: nil, finish: nil, fare: 1 )}
       expect{card.touch_out(station)}.to change{card.balance}.by (-1)
     end
 
-  end
-
-  describe '#journey_log' do
-
-    it 'records the journey log' do
-    card.top_up Oystercard::MINIMUM_BALANCE
-    card.touch_in(station)
-    card.touch_out(station)
-    expect(card.journey_log).to eq ([{station => station}])
-
-  end 
-
   end 
 
 

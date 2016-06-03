@@ -1,17 +1,16 @@
-require 'journey'
+require 'journeylog'
 
 class Oystercard
 
  MAXIMUM_BALANCE = 90
  MINIMUM_BALANCE = 1
 
- attr_reader :journey, :balance, :journey_log
+ attr_reader :journey, :balance, :log
 
 
- def initialize(journey=Journey.new)
+ def initialize(log=JourneyLog.new)
   		@balance = 0
-      @journey = journey
-      @journey_log = []
+      @log = log
       
   end
 
@@ -23,36 +22,38 @@ class Oystercard
 
 
   def touch_in(station)
+  
+    #FILL CODE HERE TO CHECK IF YOU ARE ALREADY IN A JOURNEY
+    #if you are....(you need to)
+    # charges a penalty for incomplete journey
+    # finishes that journey (so you can move on)
     fail "Insufficient funds!" if @balance < MINIMUM_BALANCE
-    journey.start(station)
+    log.start(station)
   end
 
   def touch_out(station)
-    journey.finish(station)
-    deduct
-    log_journey
-    @journey = Journey.new
+    #IF BLOCK
+
+
+    #ERROR if a journey is not in progress and you try to touch out
+    #(i.e you snuck into the tube!)
+    #you need to start a journey (you have a new but incomplete journey)
+    # call for the fare (which will come up with a penalty because we didnt finish it)
+    #log.finish(station) #SO YOU CAN FINISH THE TRIP AND GET OUT
+    
+    #ELSE BLOCK
+    log.finish(station)
+    deduct 
     
   end
-
-  def current_journey
-    {journey.entry_station => @journey.exit_station}
-  end 
 
 private
 
 attr_writer :balance
 
-  def log_journey
-    journey_log << current_journey
-  end 
 
   def deduct
-    @balance -= journey.fare 
-  end
-
-  def in_journey?
-    journey.in_journey?
+    @balance -= log.fare 
   end
 
 
